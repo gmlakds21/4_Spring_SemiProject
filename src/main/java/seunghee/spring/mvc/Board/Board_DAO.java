@@ -6,7 +6,7 @@ public interface Board_DAO {
 
     int insertBoard(Board_VO bvo);
 
-    List<Board_VO> selectBoard();
+    List<Board_VO> selectBoard(int snum);
 
     Board_VO selectOneBoard(String bno);
 
@@ -15,4 +15,6 @@ public interface Board_DAO {
     int deleteBoard(String bno);
 
     void nogada();
+
+    int selectcountBoard();
 }

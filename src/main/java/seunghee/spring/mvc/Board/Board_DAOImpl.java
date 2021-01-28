@@ -7,7 +7,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("bdao")
-public class Board_DAOImpl implements Board_DAO{
+public class Board_DAOImpl implements Board_DAO
+{
 
     @Autowired
     private SqlSession sqlSession;
@@ -18,8 +19,8 @@ public class Board_DAOImpl implements Board_DAO{
     }
 
     @Override
-    public List<Board_VO> selectBoard() {
-        return sqlSession.selectList("board.selectList");
+    public List<Board_VO> selectBoard(int snum) {
+        return sqlSession.selectList("board.selectList", snum);
     }
 
     @Override
@@ -40,6 +41,11 @@ public class Board_DAOImpl implements Board_DAO{
     @Override
     public void nogada() {
         sqlSession.insert("board.nogada");
+    }
+
+    @Override
+    public int selectcountBoard() {
+        return sqlSession.selectOne("board.countBoard");
     }
 
 }

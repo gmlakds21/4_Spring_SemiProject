@@ -1,6 +1,30 @@
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+<!--
+    게시판 네비게이션
+    현재 페이지에 따라 보여줄 페이지 블록을 결정
+
+    startPage : ((floor(cp-1)/10)*10)+1
+    endPage : startPage + 9
+
+    integerOnly => 정수값만을 계산한다
+-->
+<fmt:parseNumber var="cp" value="${param.cp}"/>
+<fmt:parseNumber var="pp" value="10"/>
+
+<fmt:parseNumber var="tp" value="${bdcnt/pp}" integerOnly="true"/>
+<c:if test="${(bdcnt%pp) gt 0}">
+    <fmt:parseNumber var="tp" value="${tp + 1}"/>
+</c:if>
+
+<fmt:parseNumber var="sp" integerOnly="true" value="${((cp-1)/pp)}"/>
+<fmt:parseNumber var="sp" value="${sp*10+1}"/>
+<fmt:parseNumber var="ep" value="${sp+9}"/>
+
+
 
 
 
@@ -61,19 +85,18 @@
     <div class="row margin1050">
         <div class="col-12">
             <ul class="pagination justify-content-center">
-                <li class="page-item disabled"><a href="#" class="page-link">이전</a></li>
-                <li class="page-item active"><a href="#" class="page-link">1</a></li>
-                <li class="page-item"><a href="#" class="page-link">2</a></li>
-                <li class="page-item"><a href="#" class="page-link">3</a></li>
-                <li class="page-item"><a href="#" class="page-link">4</a></li>
-                <li class="page-item"><a href="#" class="page-link">5</a></li>
-                <li class="page-item"><a href="#" class="page-link">6</a></li>
-                <li class="page-item"><a href="#" class="page-link">7</a></li>
-                <li class="page-item"><a href="#" class="page-link">8</a></li>
-                <li class="page-item"><a href="#" class="page-link">9</a></li>
-                <li class="page-item"><a href="#" class="page-link">10</a></li>
-                <li class="page-item"><a href="#" class="page-link">다음</a></li>
-
+                <li class="page-item <c:if test='${sp lt 10}'> disabled </c:if> ">
+                    <a href="/board/list?cp=${sp-10}" class="page-link">이전</a></li>
+                <c:forEach var="i" begin="${sp}" end="${ep}" step="1">
+                    <c:if test="${i le tp}">
+                        <li class="page-item
+                            <c:if test="${cp eq i}">active</c:if>">
+                            <a href="/board/list?cp=${i}" class="page-link">${i}</a>
+                        </li>
+                    </c:if>
+                </c:forEach>
+                <li class="page-item <c:if test='${ep lt tp}'> disabled </c:if> ">
+                    <a href="/board/list?cp=${sp+10}" class="page-link">다음</a></li>
             </ul>
         </div>
     </div>

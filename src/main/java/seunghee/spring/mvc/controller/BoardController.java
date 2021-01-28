@@ -22,22 +22,33 @@ public class BoardController {
         // this.brsrv = brsrv;
     }
 
+    /* 게시판 목록 처리 1 : 페이징
+     * ex)
+     * counts - 총 게시글 수 : 101 개
+     * perpage - 페이지당 출력 게시글 수 : 10
+     * pages - 총 페이지 수? : 11개
+     * pages = counts / perpage
+     *
+     * 1page 에 출력할 게시물의 범위
+     * count-(page-1)*10 ~ count-(page*10)+1
+     * SQL : select bno from Board limit startnum, perpage
+     */
+
+    /* 게시판 목록 처러 2 : 검색 처리
+     *
+     */
     @GetMapping("/board/list")
-    public ModelAndView list(ModelAndView mv) {
+    public ModelAndView list(ModelAndView mv, String cp) {
+
+        if ( cp == null) cp = "1";
 
         mv.setViewName("board/list.tiles");
-        mv.addObject("bds",bsrv.readBoard());
+        mv.addObject("bds",bsrv.readBoard(cp));
+        mv.addObject("bdcnt",bsrv.countBoard()); // 하단 navbar 출력용
 
         return mv;
     }
 
-    @GetMapping("/board/100")
-    public String nogada() {
-
-        bsrv.nodaga();
-
-        return "redirect:/board/list";
-    }
 
 
 
@@ -74,4 +85,15 @@ public class BoardController {
         return returnPage;
     }
 
+
+
+
+
+    @GetMapping("/board/100")
+    public String nogada() {
+
+        bsrv.nodaga();
+
+        return "redirect:/board/list";
+    }
 }

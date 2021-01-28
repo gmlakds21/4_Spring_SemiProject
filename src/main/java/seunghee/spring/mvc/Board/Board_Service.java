@@ -6,7 +6,7 @@ public interface Board_Service {
 
     boolean newBoard(Board_VO bvo);
 
-    List<Board_VO> readBoard();
+    List<Board_VO> readBoard(String cp);
 
     Board_VO readOneBoard(String bno);
 
@@ -15,4 +15,6 @@ public interface Board_Service {
     String deleteBoard(String bno);
 
     void nodaga();
+
+    int countBoard();
 }

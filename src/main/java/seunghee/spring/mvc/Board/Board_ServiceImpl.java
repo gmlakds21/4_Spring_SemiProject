@@ -23,8 +23,10 @@ public class Board_ServiceImpl implements Board_Service{
     }
 
     @Override
-    public List<Board_VO> readBoard() {
-        return bdao.selectBoard();
+    public List<Board_VO> readBoard(String cp) {
+        int snum = (Integer.parseInt(cp)-1)*10;
+
+        return bdao.selectBoard(snum);
     }
 
     @Override
@@ -39,6 +41,14 @@ public class Board_ServiceImpl implements Board_Service{
     public String deleteBoard(String bno) {
         return null;
     }
+
+    // 게시글 총 갯수
+    public int countBoard() {
+        return bdao.selectcountBoard();
+    }
+
+
+
 
     @Override
     public void nodaga() {

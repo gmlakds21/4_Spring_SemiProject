@@ -11,9 +11,10 @@
     </insert>
 
     <select id="selectList" statementType="PREPARED"
+            parameterType="int"
             resultType="seunghee.spring.mvc.Board.Board_VO">
         select bno, title, userid, regdate, thumbs, views from Board
-            order by bno desc;
+            order by bno desc limit #{startnum}, 10;
     </select>
 
     <select id="selectOne" statementType="PREPARED"
@@ -36,5 +37,12 @@
     <insert id="nogada" statementType="PREPARED">
         insert into Board (title, userid, contents) values ('Java좋아','seunghee','Java, Database, WEB3, Spring4 다 좋았다.');
     </insert>
+
+
+    <!-- 게시판 페이징 -->
+    <select id="countBoard" statementType="PREPARED"
+            resultType="int">
+        select count(bno) from Board;
+    </select>
 
 </mapper>
