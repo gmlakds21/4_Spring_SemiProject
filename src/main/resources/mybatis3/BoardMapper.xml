@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="board">
+    <insert id="insertBoard" statementType="PREPARED"
+            parameterType="seunghee.spring.mvc.Board.Board_VO">
+        insert into Board (title, userid, contents)
+            values (#{title},#{userid},#{contents});
+    </insert>
+
+    <select id="selectList" statementType="PREPARED"
+            resultType="seunghee.spring.mvc.Board.Board_VO">
+        select bno, title, userid, regdate, thumbs, views from Board
+            order by bno desc;
+    </select>
+
+    <select id="selectOne" statementType="PREPARED"
+            parameterType="String"
+            resultType="seunghee.spring.mvc.Board.Board_VO">
+        select * from Board where bno = #{bno};
+    </select>
+
+    <update id="updateBoard" statementType="PREPARED"
+            parameterType="seunghee.spring.mvc.Board.Board_VO">
+        update Board set title = #{title}, contents = #{contents}, regdate = current_timestamp
+        where bno = #{bno};
+    </update>
+
+    <delete id="deleteBoard" statementType="PREPARED"
+            parameterType="String">
+        delete from Board where bno = #{bno};
+    </delete>
+
+    <insert id="nogada" statementType="PREPARED">
+        insert into Board (title, userid, contents) values ('Java좋아','seunghee','Java, Database, WEB3, Spring4 다 좋았다.');
+    </insert>
+
+</mapper>
