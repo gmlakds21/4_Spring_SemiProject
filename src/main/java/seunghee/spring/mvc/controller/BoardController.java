@@ -9,6 +9,7 @@ import seunghee.spring.mvc.Board.Board_Service;
 import seunghee.spring.mvc.Board.Board_VO;
 import seunghee.spring.mvc._01_25_01_Member5.GoogleCaptchaUtil;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -75,9 +76,14 @@ public class BoardController {
 
 
     @GetMapping("/board/write") // 새글 쓰기 폼
-    public String write() {
+    public String write(HttpSession sess) {
 
-        return "board/write.tiles";
+        String returnPage = "redirect:/index";
+
+        if (sess.getAttribute("UID") != null)
+            returnPage = "board/write.tiles";
+
+        return returnPage;
     }
 
     @PostMapping("/board/write")
@@ -93,10 +99,15 @@ public class BoardController {
 
 
     @GetMapping("/board/update") // 수정하기 폼
-    public ModelAndView update(String bno, String cp, ModelAndView mv) {
+    public ModelAndView update(String bno, ModelAndView mv, HttpSession sess) {
 
-        mv.setViewName("board/update.tiles");
-        mv.addObject("bd", bsrv.readOneBoard(bno));
+        if(sess.getAttribute("UID") != null && bno != null) {
+            mv.setViewName("board/update.tiles");
+            mv.addObject("bd", bsrv.readOneBoard(bno));
+        } else {
+            mv.setViewName("redirect:/index");
+        }
+
 
         return mv;
     }

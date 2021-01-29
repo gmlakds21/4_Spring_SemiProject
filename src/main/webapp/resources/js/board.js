@@ -48,6 +48,3 @@ $('#upbdokbtn').on('click', function() {
         $('#upbdfrm').attr('action', '/board/update');
         $('#upbdfrm').submit();
     } })
-
-
-//view.jsp 에서
