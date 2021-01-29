@@ -9,6 +9,8 @@ import seunghee.spring.mvc.Board.Board_Service;
 import seunghee.spring.mvc.Board.Board_VO;
 import seunghee.spring.mvc._01_25_01_Member5.GoogleCaptchaUtil;
 
+import javax.servlet.http.HttpSession;
+
 @Controller
 public class BoardController {
 
@@ -40,8 +42,6 @@ public class BoardController {
     @GetMapping("/board/list")
     public ModelAndView list(ModelAndView mv, String cp) {
 
-        if ( cp == null) cp = "1";
-
         mv.setViewName("board/list.tiles");
         mv.addObject("bds",bsrv.readBoard(cp));
         mv.addObject("bdcnt",bsrv.countBoard()); // 하단 navbar 출력용
@@ -51,21 +51,28 @@ public class BoardController {
 
 
 
-
-    @GetMapping("/board/update")
-    public String update() {
-
-        return "board/update.tiles";
-    }
-
     @GetMapping("/board/view")
     public ModelAndView view(String bno, ModelAndView mv) {
 
         mv.setViewName("board/view.tiles");
         mv.addObject("bd", bsrv.readOneBoard(bno));
+        bsrv.viewCountBoard(bno);
 
         return mv;
     }
+
+
+    @GetMapping("/board/delete")
+    public String delete(String bno, String cp, HttpSession sess, String userid) {
+
+        if(sess.getAttribute("UID").equals(userid))
+            bsrv.removeBoard(bno);
+
+        return "redirect:/board/list?cp="+ cp;
+    }
+
+
+
 
     @GetMapping("/board/write") // 새글 쓰기 폼
     public String write() {
@@ -74,18 +81,37 @@ public class BoardController {
     }
 
     @PostMapping("/board/write")
-    public String writeok(Board_VO bvo) {
+    public String writeok(Board_VO bvo, HttpSession sess) {
 
         String returnPage = "redirect:/board/write";
 
-        bvo.setUserid("지현수지");
-        if (bsrv.newBoard(bvo))
-            returnPage = "redirect:/board/list";
+        if (sess.getAttribute("UID") != null && bsrv.newBoard(bvo))
+            returnPage = "redirect:/board/list?cp=1";
 
         return returnPage;
     }
 
 
+    @GetMapping("/board/update") // 수정하기 폼
+    public ModelAndView update(String bno, String cp, ModelAndView mv) {
+
+        mv.setViewName("board/update.tiles");
+        mv.addObject("bd", bsrv.readOneBoard(bno));
+
+        return mv;
+    }
+
+    @PostMapping("/board/update") // 수정하기 완료
+    public String updateok(Board_VO bvo, String cp, HttpSession sess) {
+
+        String returnPage = "redirect:/board/update?cp="+cp+"&bno="+bvo.getBno();
+
+        if(sess.getAttribute("UID").equals(bvo.getUserid()) && (bsrv.modifyBoard(bvo))) {
+            returnPage = "redirect:/board/view?cp="+cp+"&bno="+bvo.getBno();
+        }
+
+        return returnPage;
+    }
 
 
 
@@ -94,6 +120,6 @@ public class BoardController {
 
         bsrv.nodaga();
 
-        return "redirect:/board/list";
+        return "redirect:/board/list?cp=1";
     }
 }

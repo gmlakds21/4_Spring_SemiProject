@@ -25,8 +25,8 @@
 
     <update id="updateBoard" statementType="PREPARED"
             parameterType="seunghee.spring.mvc.Board.Board_VO">
-        update Board set title = #{title}, contents = #{contents}, regdate = current_timestamp
-        where bno = #{bno};
+        update Board set title = #{title}, contents = #{contents}, regdate = current_timestamp()
+            where bno = #{bno};
     </update>
 
     <delete id="deleteBoard" statementType="PREPARED"
@@ -44,5 +44,11 @@
             resultType="int">
         select count(bno) from Board;
     </select>
+
+    <!-- 조회수 증가 -->
+    <update id="viewCount" statementType="PREPARED"
+            parameterType="String">
+        update Board set views = views + 1 where bno = #{bno};
+    </update>
 
 </mapper>

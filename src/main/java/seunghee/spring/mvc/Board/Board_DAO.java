@@ -17,4 +17,6 @@ public interface Board_DAO {
     void nogada();
 
     int selectcountBoard();
+
+    int updateViewCount(String bno);
 }

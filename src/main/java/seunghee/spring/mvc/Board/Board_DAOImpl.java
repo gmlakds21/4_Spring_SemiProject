@@ -30,12 +30,12 @@ public class Board_DAOImpl implements Board_DAO
 
     @Override
     public int updateBoard(Board_VO bvo) {
-        return 0;
+        return sqlSession.update("board.updateBoard", bvo);
     }
 
     @Override
     public int deleteBoard(String bno) {
-        return 0;
+        return sqlSession.delete("board.deleteBoard", bno);
     }
 
     @Override
@@ -46,6 +46,11 @@ public class Board_DAOImpl implements Board_DAO
     @Override
     public int selectcountBoard() {
         return sqlSession.selectOne("board.countBoard");
+    }
+
+    @Override
+    public int updateViewCount(String bno) {
+        return sqlSession.update("board.viewCount", bno);
     }
 
 }

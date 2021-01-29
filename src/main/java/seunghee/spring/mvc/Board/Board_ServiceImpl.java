@@ -16,6 +16,9 @@ public class Board_ServiceImpl implements Board_Service{
 
         boolean isOk = false;
 
+        // 줄바꿈기호를 <br>로 변환작업 필요할 수 도 있음
+        // 지금 예제에서는 뷰단에서 변환작업을 수행하도록 작성함
+
         int cnt = bdao.insertBoard(bvo);
         if (cnt>0) isOk = true;
 
@@ -26,20 +29,32 @@ public class Board_ServiceImpl implements Board_Service{
     public List<Board_VO> readBoard(String cp) {
         int snum = (Integer.parseInt(cp)-1)*10;
 
+
+
         return bdao.selectBoard(snum);
     }
 
     @Override
-    public Board_VO readOneBoard(String bno) { return bdao.selectOneBoard(bno); }
-
-    @Override
-    public String modifyBoard(Board_VO bvo) {
-        return null;
+    public Board_VO readOneBoard(String bno) {
+        return bdao.selectOneBoard(bno);
     }
 
     @Override
-    public String deleteBoard(String bno) {
-        return null;
+    public boolean modifyBoard(Board_VO bvo) {
+
+        boolean isOk = false;
+        int cnt = bdao.updateBoard(bvo);
+        if (cnt > 0) isOk = true;
+        return isOk;
+    }
+
+    @Override
+    public boolean removeBoard(String bno) {
+
+        boolean isOk = false;
+        int cnt = bdao.deleteBoard(bno);
+        if (cnt > 0) isOk = true;
+        return isOk;
     }
 
     // 게시글 총 갯수
@@ -47,7 +62,15 @@ public class Board_ServiceImpl implements Board_Service{
         return bdao.selectcountBoard();
     }
 
+    // 조회수 증가
+    @Override
+    public boolean viewCountBoard(String bno) {
 
+        boolean isOk = false;
+        int cnt = bdao.updateViewCount(bno);
+        if (cnt > 0 ) isOk = true;
+        return isOk;
+    }
 
 
     @Override

@@ -1,4 +1,9 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+<c:if test="${empty UID}">
+    <c:redirect url="/board/list?cp=1"/>
+</c:if>
 
 <div class="main margin30">
     <div class="margin30">
@@ -28,8 +33,8 @@
                 <div class="col-1"></div>
                 <label for="uid"
                        class="col-form-label col-2">작성자</label>
-                <input type="text" id="uid" name="uid"
-                       class="form-control col-9" readonly>
+                <input type="text" id="uid" name="userid"
+                       class="form-control col-9" readonly value="${UID}">
             </div>
             <div class="form-group row">
                 <div class="col-1"></div>

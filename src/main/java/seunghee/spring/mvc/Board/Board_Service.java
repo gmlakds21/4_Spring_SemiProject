@@ -10,11 +10,13 @@ public interface Board_Service {
 
     Board_VO readOneBoard(String bno);
 
-    String modifyBoard(Board_VO bvo);
+    boolean modifyBoard(Board_VO bvo);
 
-    String deleteBoard(String bno);
+    boolean removeBoard(String bno);
 
     void nodaga();
 
     int countBoard();
+
+    boolean viewCountBoard(String bno);
 }

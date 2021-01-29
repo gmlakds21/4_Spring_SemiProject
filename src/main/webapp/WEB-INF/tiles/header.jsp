@@ -33,7 +33,7 @@
         <c:if test="${not empty UID}">
         <li class="nav-item"><a class="nav-link disabled">회원 가입</a></li>
         </c:if>
-        <li class="nav-item"><a class="nav-link" href="/board/list">게시판</a></li>
+        <li class="nav-item"><a class="nav-link" href="/board/list?cp=1">게시판</a></li>
         <li class="nav-item"><a class="nav-link" href="/pds/list">자료실</a></li>
         <li class="nav-item"><a class="nav-link" href="/gallery/list">갤러리</a></li>
         <li class="nav-item"><a class="nav-link" href="/admin">관리자</a></li>
