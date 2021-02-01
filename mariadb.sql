@@ -41,3 +41,41 @@ update Board set title = '~', contents = '~', regdate = current_timestamp
     where bno = ?;
 
 delete from Board where bno = ?;
+
+
+-- reply
+create table Reply (
+    rno int primary key auto_increment,
+    cno int not null,
+    bno int not null,
+    reply text not null,
+    userid varchar(20) not null,
+    regdate timestamp default current_timestamp
+);
+
+alter table Reply add constraint fk_br
+    foreign key (bno) references Board (bno);
+
+insert into Reply (bno, rno, cno, reply, userid) value
+    (309, 1, 1, '오늘은 날씨가...', 'user1'),
+    (309, 4, 1, '비올것 같아요', 'user10'),
+    (309, 6, 1, '블라블라', 'user9'),
+    (309, 2, 2, '점심메뉴는', 'user2'),
+    (309, 3, 3, '월요병이 도졌나 ...', 'user3'),
+    (309, 5, 5, '블라블라', 'user25'),
+    (309, 7, 7, '블라블라...', 'user23');
+
+select bno, rno, cno, userid, reply from Reply
+    where bno=309 order by cno;
+
+-- 데이터 추가시 반영될 auto increment 값 조회
+select auto_increment from information_schema.TABLES
+    where TABLE_NAME = 'Reply';
+
+insert into Reply (bno, cno, reply, userid) value
+    (309, (select auto_increment from information_schema.TABLES
+           where TABLE_NAME = 'Reply'), '블라블라...', 'user23');
+
+
+select bno, rno, cno, userid, reply from Reply
+    where bno=309 order by cno;

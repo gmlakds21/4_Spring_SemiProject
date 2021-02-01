@@ -3,14 +3,18 @@ $('#newbd').on('click', function() {
     location.href = "/board/write";
 })
 
+$('#findbdbtn').on('click', function() {
+    location.href = "/board/find" +
+        "?findType=" + $('#findType').val() +
+        "&findKey=" + $('#findKey').val() +
+        "&cp=1";})
+
 // view
 $('#thumbbtn').on('click', function() {
-    location.href = "/board/";
-})
+    location.href = "/board/"; })
 
 $('#listbdbtn').on('click', function() {
-    location.href = "/board/list?cp=" + $('#cp').val();
-})
+    location.href = "/board/list?cp=" + $('#cp').val(); })
 
 $('#upbdbtn').on('click', function() {
     if (confirm("이글을 수정 하시겠습니까?"))
@@ -26,10 +30,17 @@ $('#prevbtn').on('click', function() { })
 $('#nextvbtn').on('click', function() { })
 
 
-
 $('#newbdbtn').on('click', function() {
-    location.href = "/board/write"
-})
+    location.href = "/board/write"})
+
+$('#bdcmtbtn').on('click', function() {
+    if($('#reply').val() == '') alert ('댓글을 작성하세요');
+    else {
+        $('#replyfrm').attr('method', 'post');
+        $('#replyfrm').attr('action', '/board/replyok');
+        $('#uid').val('리플작성');
+        $('#replyfrm').submit(); }})
+
 
 // write
 $('#newbdbtn').on('click', function() {

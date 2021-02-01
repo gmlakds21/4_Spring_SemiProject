@@ -4,12 +4,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
-import seunghee.spring.mvc.Board.BoardReplyService;
+import seunghee.spring.mvc.Reply.Reply_Service;
 import seunghee.spring.mvc.Board.Board_Service;
 import seunghee.spring.mvc.Board.Board_VO;
-import seunghee.spring.mvc._01_25_01_Member5.GoogleCaptchaUtil;
+import seunghee.spring.mvc.Member.GoogleCaptchaUtil;
+import seunghee.spring.mvc.Reply.Reply_VO;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -17,12 +17,12 @@ public class BoardController {
 
     private Board_Service bsrv;
     private GoogleCaptchaUtil gcutil;
-    private BoardReplyService brsrv;
+    private Reply_Service brsrv;
 
-    public BoardController(Board_Service bsrv, GoogleCaptchaUtil gcutil) {
+    public BoardController(Board_Service bsrv, GoogleCaptchaUtil gcutil, Reply_Service brsrv) {
         this.bsrv = bsrv;
         this.gcutil = gcutil;
-        // this.brsrv = brsrv;
+        this.brsrv = brsrv;
     }
 
     /* 게시판 목록 처리 1 : 페이징
@@ -57,6 +57,7 @@ public class BoardController {
 
         mv.setViewName("board/view.tiles");
         mv.addObject("bd", bsrv.readOneBoard(bno));
+        mv.addObject("rp",brsrv.readReply(bno));
         bsrv.viewCountBoard(bno);
 
         return mv;
@@ -123,6 +124,33 @@ public class BoardController {
 
         return returnPage;
     }
+
+
+    //게시물 검색을 위한 url 호출방법 : /board/find?findtype=title&findkey=기생충&cp=2
+    @GetMapping("/board/find")
+    public ModelAndView find(ModelAndView mv, String cp,
+                             String findType, String findKey) {
+
+        mv.setViewName("board/list.tiles");
+
+        mv.addObject("bds", bsrv.readBoard(cp, findType, findKey) );
+        mv.addObject("bdcnt", bsrv.countBoard(findType, findKey));
+
+
+        return mv;
+    }
+
+    @PostMapping("board/replyok")
+    public String replyok(Reply_VO rvo) {
+
+        String returnPage ="redirect:/board/view?bno="+rvo.getBno();
+
+        brsrv.newReply(rvo);
+
+        return returnPage;
+    }
+
+
 
 
 

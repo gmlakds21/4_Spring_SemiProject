@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 @Repository("bdao")
 public class Board_DAOImpl implements Board_DAO
@@ -51,6 +52,16 @@ public class Board_DAOImpl implements Board_DAO
     @Override
     public int updateViewCount(String bno) {
         return sqlSession.update("board.viewCount", bno);
+    }
+
+    @Override
+    public List<Board_VO> findselectBoard(Map<String, Object> param) {
+        return sqlSession.selectList("board.findSelectList", param);
+    }
+
+    @Override
+    public int findcountBoard(Map<String, String> param) {
+        return sqlSession.selectOne("board.findCountBoard", param);
     }
 
 }

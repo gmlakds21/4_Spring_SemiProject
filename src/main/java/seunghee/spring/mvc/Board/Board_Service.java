@@ -7,6 +7,7 @@ public interface Board_Service {
     boolean newBoard(Board_VO bvo);
 
     List<Board_VO> readBoard(String cp);
+    List<Board_VO> readBoard(String cp, String findtype, String findkey);
 
     Board_VO readOneBoard(String bno);
 
@@ -17,6 +18,8 @@ public interface Board_Service {
     void nodaga();
 
     int countBoard();
+    int countBoard(String findtype, String findkey);
 
     boolean viewCountBoard(String bno);
+
 }

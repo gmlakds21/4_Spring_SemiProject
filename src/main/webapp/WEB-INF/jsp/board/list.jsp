@@ -24,6 +24,17 @@
 <fmt:parseNumber var="sp" value="${sp*10+1}"/>
 <fmt:parseNumber var="ep" value="${sp+9}"/>
 
+<%--
+    검색여부에 따라 네비게이션 출력을 다르게 함
+    일반 목록 출력 : /board/view?cp=
+    검색후 목록 출력 : /board/find?findtype=???&findkey=???&cp=??
+--%>
+    <c:set var="navlink" value="/board/list?cp=" />
+    <c:if test="${not empty param.findKey}">
+        <c:set var="navlink"
+               value="/board/find?findType=${param.findType}&findKey=${param.findKey}&cp=">
+        </c:set>
+    </c:if>
 
 
 
@@ -35,12 +46,25 @@
     </div>
 
     <div class="row margin1050">
-        <div class="col-12 text-right">
-            <c:if test="${not empty UID}">
+        <div class="col-8">
+            <div class="form-group row">
+                <select name="findType" id="findType" class="form-control col-4">
+                    <option value="title">제목</option>
+                    <option value="ticon">제목 + 내용</option>
+                    <option value="contents">내용</option>
+                    <option value="userid">작성자</option>
+                </select>&nbsp;
+                <input type="text" name="findKey" id="findKey" class="form-control col-5">&nbsp;
+                <button type="button" id="findbdbtn" class="btn btn-dark">
+                    <i class="bi bi-search"></i>검색</button>
+            </div>
+        </div>
+        <div class="col-4 text-right">
+            <c:if test="${not empty UID}">--%>
                 <button type="button" id="newbd"
                         class="btn btn-info">
                     <i class="bi bi-plus-circle" style="position: relative; top: -2px;"></i> 글쓰기</button>
-            </c:if>
+            </c:if>--%>
         </div>
     </div>
 
@@ -87,17 +111,17 @@
         <div class="col-12">
             <ul class="pagination justify-content-center">
                 <li class="page-item <c:if test='${sp lt 10}'> disabled </c:if> ">
-                    <a href="/board/list?cp=${sp-10}" class="page-link">이전</a></li>
+                    <a href="${navlink}${sp-10}" class="page-link">이전</a></li>
                 <c:forEach var="i" begin="${sp}" end="${ep}" step="1">
                     <c:if test="${i le tp}">
                         <li class="page-item
                             <c:if test="${cp eq i}">active</c:if>">
-                            <a href="/board/list?cp=${i}" class="page-link">${i}</a>
+                            <a href="${navlink}${i}" class="page-link">${i}</a>
                         </li>
                     </c:if>
                 </c:forEach>
-                <li class="page-item <c:if test='${ep lt tp}'> disabled </c:if> ">
-                    <a href="/board/list?cp=${sp+10}" class="page-link">다음</a></li>
+                <li class="page-item <c:if test='${ep gt tp}'> disabled </c:if> ">
+                    <a href="${navlink}${sp+10}" class="page-link">다음</a></li>
             </ul>
         </div>
     </div>

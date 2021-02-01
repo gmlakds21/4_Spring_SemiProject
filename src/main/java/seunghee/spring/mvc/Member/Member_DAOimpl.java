@@ -1,9 +1,8 @@
-package seunghee.spring.mvc._01_25_01_Member5;
+package seunghee.spring.mvc.Member;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import seunghee.spring.mvc._01_26_01_Zipcode.Zipcode_VO;
 
 import java.util.List;
 
@@ -32,7 +31,7 @@ public class Member_DAOimpl implements Member_DAO {
     @Override
     public int selectLogin(Member_VO mvo) {
 
-        return sqlSession.selectOne("member.checkLogin",mvo);
+        return sqlSession.selectOne("member.checkLogin", mvo);
     }
 
 }

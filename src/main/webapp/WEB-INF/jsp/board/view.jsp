@@ -89,61 +89,52 @@
         <input type="hidden" id="cp" value="${param.cp}">
         <input type="hidden" id="userid" value="${bd.userid}">
 
-
         <div class="row" style="margin-top: 100px">
             <h3><i class="bi bi-chat-square-dots-fill" style="position: relative; top:-3px "></i>나도 한마디</h3>
             <table class="table tblines tt2">
-                <tr><td><h4>작성자</h4></td>
-                    <td>
-                        <div class="cmtbg1">2021-01-30 15:15:15</div>
-                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text</p>
-                        <ul class="list-unstyled">
-                            <li>
-                                <div class="cmtbg2"><span class="h4">Lorem</span><span style="float: right">2021-01-30 16:16:16</span></div>
-                                <p>Where does it come from? </p>
-
-                            </li>
-                        </ul>
-                    </td>
-                </tr>
-                <tr><td><h4>작성자</h4></td>
-                    <td>
-                        <div class="cmtbg1">2021-01-30 15:15:15</div>
-                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text</p>
-                    </td>
-                </tr>
-                <tr><td><h4>작성자</h4></td>
-                    <td>
-                        <div class="cmtbg1">2021-01-30 15:15:15</div>
-                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text</p>
-                    </td>
-                </tr>
-                <tr><td><h4>작성자</h4></td>
-                    <td>
-                        <div class="cmtbg1">2021-01-30 15:15:15</div>
-                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text</p>
-                    </td>
-                </tr>
-                <tr><td><h4>작성자</h4></td>
-                    <td>
-                        <div class="cmtbg1">2021-01-30 15:15:15</div>
-                        <p>Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text</p>
-                    </td>
-                </tr>
-
+                <c:forEach var="r" items="${rp}">
+                    <c:if test="${r.cno eq r.rno}">
+                        <tr>
+                            <td><h4>${r.userid}</h4></td>
+                            <td>
+                                <div class="cmtbg1">${r.regdate}</div>
+                                <p>${r.reply}</p>
+                            </td>
+                        </tr>
+                    </c:if>
+                    <c:if test="${r.cno ne r.rno}">
+                        <tr>
+                            <td></td>
+                            <td>
+                                <ul class="list-unstyled">
+                                    <li>
+                                        <div class="cmtbg2">
+                                            <span class="h4">${r.userid}</span>
+                                            <span style="float: right">${r.regdate}</span>
+                                        </div>
+                                        <p>${r.reply}</p>
+                                    </li>
+                                </ul>
+                            </td>
+                       </tr>
+                    </c:if>
+                    </c:forEach>
             </table>
         </div>
         <div class="row">
             <form id="replyfrm" class="card card-body bg-light">
                 <div class="form-group row justify-content-center">
                     <label style="margin-top: 55px" class="text-primary">로그인하세요</label>&nbsp;&nbsp;
-                    <textarea id="comment" rows="5"
+                    <textarea id="reply" name="reply" rows="5"
                               class="form-control col-7 border-danger"></textarea>&nbsp;&nbsp;
                     <span>
-                            <button id="bdcmtbtn" class="btn btn-dark" style="margin-top: 50px">
-                                <i class="bi bi-chat-text-fill" style="position: relative; top:-3px"></i>
-                                댓글쓰기</button>
-                        </span>
+                        <button type="button" id="bdcmtbtn" class="btn btn-dark" style="margin-top: 50px">
+                            <i class="bi bi-chat-text-fill" style="position: relative; top:-3px"></i>
+                            댓글쓰기
+                        </button>
+                    </span>
+                    <input type="hidden" name="bno" value="${param.bno}">
+                    <input type="hidden" name="userid" id="uid" value="${UID}">
                 </div>
             </form>
         </div>

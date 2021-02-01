@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import seunghee.spring.mvc._01_25_01_Member5.GoogleCaptchaUtil;
-import seunghee.spring.mvc._01_25_01_Member5.Member_Service;
-import seunghee.spring.mvc._01_25_01_Member5.Member_VO;
+import seunghee.spring.mvc.Member.GoogleCaptchaUtil;
+import seunghee.spring.mvc.Member.Member_Service;
+import seunghee.spring.mvc.Member.Member_VO;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

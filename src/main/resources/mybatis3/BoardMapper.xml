@@ -51,4 +51,30 @@
         update Board set views = views + 1 where bno = #{bno};
     </update>
 
+    <!-- 검색하기 -->
+    <select id="findSelectList" statementType="PREPARED"
+            parameterType="map"
+            resultType="seunghee.spring.mvc.Board.Board_VO">
+        select bno, title, userid, regdate, thumbs, views from Board
+
+        <if test="findType != 'ticon'">
+            where ${findType} like concat('%',#{findKey},'%')
+                order by bno desc limit #{startnum}, 10; </if>
+        <if test="findType == 'ticon'">
+            where title like concat('%',#{findKey},'%') or contents like concat('%',#{findKey},'%')
+                order by bno desc limit #{startnum}, 10; </if>
+    </select>
+
+    <select id="findCountBoard" statementType="PREPARED"
+            parameterType="map"
+            resultType="int">
+        select count(bno) from Board
+        <if test="findType != 'ticon'">
+            where ${findType} like concat('%',#{findKey},'%');
+        </if>
+        <if test="findType == 'ticon'">
+            where title like concat('%',#{findKey},'%') or contents like concat('%',#{findKey},'%');
+        </if>
+
+    </select>
 </mapper>

@@ -3,7 +3,9 @@ package seunghee.spring.mvc.Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service("bsrv")
 public class Board_ServiceImpl implements Board_Service{
@@ -35,6 +37,19 @@ public class Board_ServiceImpl implements Board_Service{
     }
 
     @Override
+    public List<Board_VO> readBoard(String cp, String findtype, String findkey) {
+
+        Map<String, Object> param = new HashMap<>();
+
+        int snum = (Integer.parseInt(cp)-1)*10;
+        param.put("startnum", snum);
+        param.put("findType", findtype);
+        param.put("findKey", findkey);
+
+        return bdao.findselectBoard(param);
+    }
+
+    @Override
     public Board_VO readOneBoard(String bno) {
         return bdao.selectOneBoard(bno);
     }
@@ -60,6 +75,17 @@ public class Board_ServiceImpl implements Board_Service{
     // 게시글 총 갯수
     public int countBoard() {
         return bdao.selectcountBoard();
+    }
+
+    @Override
+    public int countBoard(String findType, String findKey) {
+
+        Map<String, String> param = new HashMap<>();
+
+        param.put("findType", findType);
+        param.put("findKey", findKey);
+
+        return bdao.findcountBoard(param);
     }
 
     // 조회수 증가

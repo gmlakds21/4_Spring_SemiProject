@@ -1,6 +1,4 @@
-package seunghee.spring.mvc._01_25_01_Member5;
-
-import seunghee.spring.mvc._01_26_01_Zipcode.Zipcode_VO;
+package seunghee.spring.mvc.Member;
 
 import java.util.List;
 

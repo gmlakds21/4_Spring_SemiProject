@@ -5,7 +5,7 @@
 
 <mapper namespace="member">
     <insert id="insertMember" statementType="PREPARED"
-            parameterType="seunghee.spring.mvc._01_25_01_Member5.Member_VO">
+            parameterType="seunghee.spring.mvc.Member.Member_VO">
         insert into Member2
             (name, jumin, userid, passwd, zipcode, addr1, addr2, email, phone)
             values (#{name}, #{jumin},#{userid},#{passwd},#{zipcode},#{addr1},
@@ -14,7 +14,7 @@
 
     <select id="zipcode" statementType="PREPARED"
             parameterType="String"
-            resultType="seunghee.spring.mvc._01_26_01_Zipcode.Zipcode_VO">
+            resultType="seunghee.spring.mvc.Member.Zipcode_VO">
         select * from zipcode where dong like #{mydong};
     </select>
 
@@ -25,7 +25,7 @@
     </select>
 
     <select id="checkLogin" statementType="PREPARED"
-            parameterType="seunghee.spring.mvc._01_25_01_Member5.Member_VO"
+            parameterType="seunghee.spring.mvc.Member.Member_VO"
             resultType="int">
         select count(userid) as cnt from Member2 where userid = #{userid} and passwd = #{passwd};
     </select>

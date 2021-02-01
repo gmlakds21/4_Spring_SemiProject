@@ -1,4 +1,4 @@
-package seunghee.spring.mvc._01_25_01_Member5;
+package seunghee.spring.mvc.Member;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

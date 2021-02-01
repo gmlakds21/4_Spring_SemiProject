@@ -65,5 +65,10 @@
     <Logger name="org.springframework.jdbc.core.StatementCreatorUtils"
             level="trace" />
 
+    <!-- 내가 작성하고 있는 패키지 -->
+    <logger name="seunghee.spring.mvc.*" additivity="false" >
+        <AppenderRef ref="console" level="info" />
+    </logger>
+
     </Loggers>
 </Configuration>

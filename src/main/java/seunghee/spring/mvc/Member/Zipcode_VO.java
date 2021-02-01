@@ -1,4 +1,4 @@
-package seunghee.spring.mvc._01_26_01_Zipcode;
+package seunghee.spring.mvc.Member;
 
 public class Zipcode_VO {
 

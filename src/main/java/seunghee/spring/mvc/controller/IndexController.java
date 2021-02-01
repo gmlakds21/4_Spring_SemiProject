@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import seunghee.spring.mvc._01_25_01_Member5.Member_Service;
-import seunghee.spring.mvc._01_25_01_Member5.Member_VO;
+import seunghee.spring.mvc.Member.Member_Service;
+import seunghee.spring.mvc.Member.Member_VO;
 
 import javax.servlet.http.HttpSession;
 

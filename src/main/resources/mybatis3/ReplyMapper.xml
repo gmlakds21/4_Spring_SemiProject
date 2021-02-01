@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="reply">
+    <insert id="insertReply" statementType="PREPARED"
+            parameterType="seunghee.spring.mvc.Reply.Reply_VO">
+        insert into Reply (cno, bno, userid, reply)
+            value (#{cno}, #{bno}, #{userid}, #{reply});
+    </insert>
+
+    <select id="selectReply" statementType="PREPARED"
+            parameterType="String"
+            resultType="seunghee.spring.mvc.Reply.Reply_VO">
+        select * from Reply
+            where bno = #{bno} order by cno;
+    </select>
+
+    <select id="lastRno" statementType="PREPARED"
+            resultType="String">
+        select auto_increment from information_schema.TABLES
+            where TABLE_NAME = 'Reply';
+    </select>
+</mapper>
