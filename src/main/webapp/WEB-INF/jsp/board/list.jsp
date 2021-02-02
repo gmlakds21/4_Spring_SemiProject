@@ -71,11 +71,11 @@
             </div>
         </div>
         <div class="col-4 text-right">
-            <c:if test="${not empty UID}">--%>
+            <c:if test="${not empty UID}">
                 <button type="button" id="newbd"
                         class="btn btn-info">
                     <i class="bi bi-plus-circle" style="position: relative; top: -2px;"></i> 글쓰기</button>
-            </c:if>--%>
+            </c:if>
         </div>
     </div>
 

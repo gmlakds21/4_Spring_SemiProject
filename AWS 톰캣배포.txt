@@ -1,0 +1,13 @@
+AWS 에 생성해둔 centos 서버에
+스프링 MVC 프로젝트 배포하고 확인하기
+
+1. 스프링 MVC 프로젝트를 WAR 로 패키징하기
+    (확인사항) Ctrl + Alt + Shift + S / artifacts : 프로젝트명.war 이 있는지 확인
+    Build : Build Artifacts - 프로젝트명.war - action - build
+
+2. AWS 톰캣 서버의 webapp 에 업로드하기
+    1번 과정에서 생성된 결과물인 war 파일을 WinSCP 를 이용해서 tomcat/webapp 에 업로드함
+    => 톰켓 서버가 자동으로 war 파일을 배포함
+    새로고침
+
+3. 브라우저로 확인
