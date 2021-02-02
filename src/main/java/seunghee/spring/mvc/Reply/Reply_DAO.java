@@ -7,4 +7,6 @@ public interface Reply_DAO {
     List<Reply_VO> selectReply(String bno);
 
     int insertReply(Reply_VO rvo);
+
+    int insertReReply(Reply_VO rvo);
 }

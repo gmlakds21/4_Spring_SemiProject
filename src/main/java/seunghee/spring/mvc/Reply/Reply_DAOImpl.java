@@ -16,6 +16,10 @@ public class Reply_DAOImpl implements Reply_DAO {
         return sqlSession.selectList("reply.selectReply", bno);
     }
 
+    public String selectLastRno() {
+        return sqlSession.selectOne("reply.lastRno");
+    }
+
     @Override
     public int insertReply(Reply_VO rvo) {
 
@@ -23,7 +27,9 @@ public class Reply_DAOImpl implements Reply_DAO {
         return sqlSession.insert("reply.insertReply", rvo);
     }
 
-    public String selectLastRno() {
-        return sqlSession.selectOne("reply.lastRno");
+    @Override
+    public int insertReReply(Reply_VO rvo) {
+        return sqlSession.insert("reply.insertReply", rvo);
     }
+
 }

@@ -42,6 +42,29 @@ $('#bdcmtbtn').on('click', function() {
         $('#replyfrm').submit(); }})
 
 
+function addReply(cno) {
+    $('#replyModal').modal('show');
+    $('#cno').val(cno); // 대댓글 작성시 부모댓글 번호를 cno 에 저장
+} // 대댓글 대화상자 띄우기
+
+function modReply(){
+
+}
+
+function delReply() {
+
+}
+
+$('#rpbtn').on('click', function() {
+    if ($('#rereply').val() == '' ) alert('대댓글을 작성하세요');
+    else if ($('#UID').val() == null) alert('로그인을 하세요'); // 또는 location.href = /join/login;
+    else {
+        $('#rpfrm').attr('method', 'post');
+        $('#rpfrm').attr('action', '/board/replyok');
+        $('#rpfrm').submit();
+    }})  // 대댓글 작성하기
+
+
 // write
 $('#newbdbtn').on('click', function() {
     if ($('#title').val() == '') alert('제목 작성하세요');

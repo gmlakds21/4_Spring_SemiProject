@@ -23,4 +23,13 @@ public class Reply_ServiceImpl implements Reply_Service {
         if (cnt > 0) isOk = true;
         return isOk;
     }
+
+    @Override
+    public boolean newReReply(Reply_VO rvo) {
+
+        boolean isOk = false;
+        int cnt = brdao.insertReReply(rvo);
+        if (cnt > 0) isOk = true;
+        return isOk;
+    }
 }

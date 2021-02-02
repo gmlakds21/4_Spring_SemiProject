@@ -36,7 +36,18 @@
         </c:set>
     </c:if>
 
+<%--
+    글번호 재 조정
+    총 게시물 수 : 150, 페이지당 게시물 수 : 10
+    page 1 : 150 ~ 141
+    page 2 : 140 ~ 131
+    page 3 : 130 ~ 121
+    ...
+    page n : {total - (n-1)*10} ~ {total -n*10 +1}
+--%>
 
+<fmt:parseNumber var="snum" integerOnly="true"
+                 value="${bdcnt - (cp-1) * pp}"/>
 
 
 <div class="main margin30">
@@ -93,13 +104,14 @@
 
                 <c:forEach var="b" items="${bds}">
                 <tr>
-                    <td>${b.bno}</td>
+                    <td>${snum}</td>
                     <td><a href="/board/view?cp=${cp}&bno=${b.bno}">${b.title}</a></td>
                     <td>${b.userid}</td>
                     <td>${fn: substring(b.regdate,0,10)}</td>
                     <td>${b.thumbs}</td>
                     <td>${b.views}</td>
                 </tr>
+                <c:set var="snum" value="${snum-1}"/>
                 </c:forEach>
 
                 </tbody>
