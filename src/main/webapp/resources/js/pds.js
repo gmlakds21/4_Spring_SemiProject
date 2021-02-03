@@ -1,3 +1,8 @@
+// list
+$('#newpd').on('click', function() {
+    location.href = "/pds/write";
+})
+
 // write
 $('#newpdbtn').on('click', function( ) {
     if ($('#title').val() == "" ) alert ('제목을 작성하세요');

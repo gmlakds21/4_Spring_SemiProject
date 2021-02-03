@@ -15,8 +15,8 @@
 <fmt:parseNumber var="cp" value="${param.cp}"/>
 <fmt:parseNumber var="pp" value="10"/>
 
-<fmt:parseNumber var="tp" value="${bdcnt/pp}" integerOnly="true"/>
-<c:if test="${(bdcnt%pp) gt 0}">
+<fmt:parseNumber var="tp" value="${pdcnt/pp}" integerOnly="true"/>
+<c:if test="${(pdcnt%pp) gt 0}">
     <fmt:parseNumber var="tp" value="${tp + 1}"/>
 </c:if>
 
@@ -47,7 +47,7 @@
 --%>
 
 <fmt:parseNumber var="snum" integerOnly="true"
-                 value="${bdcnt - (cp-1) * pp}"/>
+                 value="${pdcnt - (cp-1) * pp}"/>
 
 
 <div class="main margin30">
@@ -66,13 +66,13 @@
                     <option value="userid">작성자</option>
                 </select>&nbsp;
                 <input type="text" name="findKey" id="findKey" class="form-control col-5">&nbsp;
-                <button type="button" id="findbdbtn" class="btn btn-dark">
+                <button type="button" id="pdfindbtn" class="btn btn-dark">
                     <i class="bi bi-search"></i>검색</button>
             </div>
         </div>
         <div class="col-4 text-right">
             <c:if test="${not empty UID}">
-                <button type="button" id="newbd"
+                <button type="button" id="newpd"
                         class="btn btn-info">
                     <i class="bi bi-plus-circle" style="position: relative; top: -2px;"></i> 글쓰기</button>
             </c:if>
@@ -102,14 +102,14 @@
                     <th>128</th>
                 </tr>
 
-                <c:forEach var="b" items="${bds}">
+                <c:forEach var="p" items="${pds}">
                 <tr>
                     <td>${snum}</td>
-                    <td><a href="/pds/view?cp=${cp}&bno=${b.bno}">${b.title}</a></td>
-                    <td>${b.userid}</td>
-                    <td>${fn: substring(b.regdate,0,10)}</td>
-                    <td>${b.thumbs}</td>
-                    <td>${b.views}</td>
+                    <td><a href="/pds/view?cp=${cp}&pno=${p.pno}">${p.title}</a></td>
+                    <td>${p.userid}</td>
+                    <td>${fn: substring(p.regdate,0,10)}</td>
+                    <td>${p.thumbs}</td>
+                    <td>${p.views}</td>
                 </tr>
                 <c:set var="snum" value="${snum-1}"/>
                 </c:forEach>

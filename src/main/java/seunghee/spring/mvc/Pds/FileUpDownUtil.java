@@ -6,6 +6,7 @@ import org.apache.commons.fileupload.RequestContext;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,14 +14,20 @@ import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
+@Component("fud")
 public class FileUpDownUtil {
+
+    // 자바 웹 프로그래밍의 파일업로드 지원
+    // 1. oreilly사의 '자바 서블릿 프로그래밍' 도서의 예제 - cos.jar
+    // 2. apache commons project - FileUpload (추천!)
+    //  => commons.apache.org
+    // 3. Servlet 3.x부터 파일업로드 내장 - MultipartFile
 
     private String uploadPath = "c:/Java/pdsupload/";
     // 파일 업로드시 저장된 경로 지정
 
     // 업로드 처리 메서드
-    public Map<String, String> procUpload(
-            HttpServletRequest req) {
+    public Map<String, String> procUpload(HttpServletRequest req) {
 
         Map<String, String> frmdata = new HashMap<>();
 
@@ -39,6 +46,16 @@ public class FileUpDownUtil {
                 // 클라이언트 요청정보를 리스트에 저장
                 List items = upload.parseRequest(req);
                 Iterator<FileItem> params = items.iterator();
+
+                // ex) fname => jobs.txt
+                // 겹치치 않는 파일명을 위해 유니크한 임의의 값 생성 1
+                //UUID uuid = UUID.randomUUID();
+
+                // 겹치치 않는 파일명을 위해 유니크한 임의의 값 생성 2
+                String fmt = "yyyyMMddHHmmss";
+                SimpleDateFormat sdf = new SimpleDateFormat(fmt);
+                String uuid = sdf.format(new Date());
+                frmdata.put("uuid", uuid);
 
                 // 리스트에 저장된 요청정보를 하나씩 꺼내서
                 // 폼 데이터의 유형에 따라 각각 처리
@@ -61,15 +78,6 @@ public class FileUpDownUtil {
                             fname = ufname.substring(
                                     ufname.lastIndexOf("\\") + 1 ); // 파일명 추출
 
-                            // ex) fname => jobs.txt
-                            // 겹치치 않는 파일명을 위해 유니크한 임의의 값 생성 1
-                            //UUID uuid = UUID.randomUUID();
-
-                            // 겹치치 않는 파일명을 위해 유니크한 임의의 값 생성 2
-                            String fmt = "yyyyMMddHHmmss";
-                            SimpleDateFormat sdf = new SimpleDateFormat(fmt);
-                            String uuid = sdf.format(new Date());
-
                             String fnames[] = fname.split("[.]");
                             //fname = fnames[0] + uuid.toString() + "." + fnames[1];
                             fname = fnames[0] + uuid + "." + fnames[1];
@@ -77,10 +85,13 @@ public class FileUpDownUtil {
                             // ex) fname => jobs123456789.txt
                             // ex) f => c:/Java/pdsupload/jobs123456789.txt
                             File f = new File(uploadPath + "/" + fname);
+                            // 업로드한 파일을 시스템에 저장할때는 파일명+uuid 로 설정
                             item.write(f);  // 지정한 경로에 파일 저장
 
                             String name = item.getFieldName();
-                            frmdata.put(name, fname);
+                            // 업로드한 파일정보를 디비에 저장할때는 원본파일명 그대로 설정
+                            frmdata.put(name, fnames[0] + "." + fnames[1]);
+
 
                             // 파일 기타정보 처리
                             long fsize = item.getSize() / 1024;
@@ -92,8 +103,8 @@ public class FileUpDownUtil {
                             // 파일명 처리 결과 확인
                             System.out.println(ufname + "/" + fname);
                             System.out.println(fsize + "/" + ftype);
-
                         }
+
                     } catch (Exception ex) {
                         ex.printStackTrace();
                     }
@@ -139,8 +150,7 @@ public class FileUpDownUtil {
             res.reset();
             res.setContentType("application/octet-stream");
             // 응답 스트림의 내용은 이진형태로 구성되었음
-            res.setHeader("Content-Description",
-                    "FileDownload");
+            res.setHeader("Content-Description", "FileDownload");
             // 다운로드를 위해 임의로 작성
 
             if (!skip) {  // 다운로드할 파일이 존재한다면
@@ -170,8 +180,7 @@ public class FileUpDownUtil {
                 }
 
             } else {  // 다운로드할 파일이 없다면
-                res.setContentType(
-                        "text/html; charset=utf-8");
+                res.setContentType("text/html; charset=utf-8");
                 PrintWriter out = res.getWriter();
                 out.print("<h1>다운로드할 파일이 없어요!!</h1>");
             }
@@ -184,5 +193,78 @@ public class FileUpDownUtil {
         } // try
 
     } // method
+
+    // 다운로드 처리 메서드V2
+    // fName, fname 구분해서 보자
+    public void procDownloadV2( String fname, String uuid, HttpServletResponse res) throws IOException {
+
+        // 다운로드할 파일이름 조합
+        String fName = fname.split("[.]")[0] + uuid + "." + fname.split("[.]")[1];
+
+        // HTTP 응답을 위해 stream 관련 변수 선언
+        InputStream is = null;
+        OutputStream os = null;
+        File f = null;
+
+        try {
+            boolean skip = false;
+
+            // 다운로드할 파일의 실제 위치 파악하고
+            // 파일의 내용을 stream으로 미리 읽어둠
+            try {
+                f = new File(uploadPath, fName);
+                is = new FileInputStream(f);
+            } catch (Exception ex) {
+                skip = true;
+            }
+
+            // HTTP 응답을 위한 준비작업
+            res.reset();
+            res.setContentType("application/octet-stream");
+            // 응답 스트림의 내용은 이진형태로 구성되었음
+            res.setHeader("Content-Description", "FileDownload");
+            // 다운로드를 위해 임의로 작성
+
+            if (!skip) {  // 다운로드할 파일이 존재한다면
+
+                // 파일명이 한글인 경우 제대로 표시할 수 있도록
+                // utf-8로 변환함
+                fname = new String(
+                        fname.getBytes("utf-8"),
+                        "iso-8859-1");
+
+                // 클릭시 다운로드 대화상자에 표시할 내용 정의
+                res.setHeader("Content-Disposition",
+                        "attachment; filename=\"" + fname + "\"");
+                res.setHeader("Content-Type",
+                        "application/octet-stream; charset=utf-8");
+                res.setHeader("Content-Length", f.length() + "");
+
+                // Http 응답으로 파일의 내용을 스트림으로 전송함
+                os = res.getOutputStream();
+                // 파일의 내용을 byte 배열에 저장함
+                byte b[] = new byte[(int) f.length()];
+                int cnt = 0;
+
+                // 1byte씩 http 응답 스트림으로 쏨
+                while ((cnt = is.read(b)) > 0) {
+                    os.write(b, 0, cnt);
+                }
+
+            } else {  // 다운로드할 파일이 없다면
+                res.setContentType("text/html; charset=utf-8");
+                PrintWriter out = res.getWriter();
+                out.print("<h1>다운로드할 파일이 없어요!!</h1>");
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        } finally {
+            if (os != null) os.close();
+            if (is != null) is.close();
+        } // try
+
+    } // method
+
 
 }

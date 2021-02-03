@@ -21,6 +21,15 @@ public class PDS_VO {
     private String fdown1;
     private String fdown2;
     private String fdown3;
+    private String uuid;
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getPno() {
         return pno;

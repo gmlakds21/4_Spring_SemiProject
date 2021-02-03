@@ -37,7 +37,7 @@
             </div>
             <div class="col-6 text-right">
                 <c:if test="${not empty UID}">
-                    <button type="button" id="newbd"
+                    <button type="button" id="newpd"
                             class="btn btn-light">
                         <i class="bi bi-plus-circle-fill" style="position: relative; top:-3px"></i>
                         새글쓰기</button>
@@ -47,25 +47,52 @@
         <div class="row">
             <table class="table">
                 <tr class="tblines2" style="background: #dff0f8">
-                    <th colspan="2" class="text-center"><h1>${bd.title}</h1></th>
+                    <th colspan="2" class="text-center"><h1>${pd.title}</h1></th>
                 </tr>
                 <tr style="background: #ccff99">
-                    <td class="text-left"><h4>${bd.userid}</h4></td>
-                    <td class="text-right"><b>${bd.regdate}</b> / ${bd.thumbs} / ${bd.views}</td>
+                    <td class="text-left"><h4>${pd.userid}</h4></td>
+                    <td class="text-right"><b>${pd.regdate}</b> / ${pd.thumbs} / ${pd.views}</td>
                 </tr>
                 <tr class="tblines2" style="background: #ffffcc">
-                    <td colspan="2">${fn:replace(bd.contents, newChar, "<br>")}</td>
+                    <td colspan="2">${fn:replace(pd.contents, newChar, "<br>")}</td>
                 </tr>
+                <c:if test="${pd.fname1 ne null}">
+                    <tr>
+                        <td class="text-left">첨부1</td>
+                        <td>
+                            <a href="/pds/down?pno=${pd.pno}&order=1"> ${pd.fname1} </a>
+                            (${pd.fsize1}KB, ${pd.fdown1}회 다운로드함)
+                        </td>
+                    </tr>
+                </c:if>
+                <c:if test="${pd.fname2 ne null}">
+                    <tr>
+                        <td class="text-left">첨부2</td>
+                        <td>
+                            <a href="/pds/down?pno=${pd.pno}&order=2"> ${pd.fname2} </a>
+                            (${pd.fsize2}KB, ${pd.fdown2}회 다운로드함)
+                        </td>
+                    </tr>
+                </c:if>
+                <c:if test="${pd.fname3 ne null}">
+                    <tr>
+                        <td class="text-left">첨부3</td>
+                        <td>
+                            <a href="/pds/down?pno=${pd.pno}&order=3"> ${pd.fname3} </a>
+                            ${pd.fname3} (${pd.fsize3}KB, ${pd.fdown3}회 다운로드함)
+                        </td>
+                    </tr>
+                </c:if>
             </table>
         </div>
         <div class="row">
             <div class="col-6">
-                <c:if test="${not empty UID and UID eq bd.userid}">
-                    <button type="button" id="upbdbtn"
+                <c:if test="${not empty UID and UID eq pd.userid}">
+                    <button type="button" id="uppdbtn"
                             class="btn btn-warning">
                         <i class="bi bi-pencil-square" style="position: relative; top:-3px"></i>
                         수정하기</button>
-                    <button type="button" id="rmbdbtn"
+                    <button type="button" id="rmpdbtn"
                             class="btn btn-danger">
                         <i class="bi bi-trash-fill" style="position: relative; top:-3px"></i>
                         삭제하기</button>
@@ -78,16 +105,16 @@
                         <i class="bi bi-hand-thumbs-up" style="position: relative; top:-3px"></i>
                         추천하기</button>
                 </c:if>
-                <button type="button" id="listbdbtn"
+                <button type="button" id="listpdbtn"
                         class="btn btn-dark">
                     <i class="bi bi-card-list" style="position: relative; top:-3px"></i>
                     목록으로</button>
             </div>
         </div>
 
-        <input type="hidden" id="bno" value="${param.bno}">
+        <input type="hidden" id="pno" value="${param.pno}">
         <input type="hidden" id="cp" value="${param.cp}">
-        <input type="hidden" id="userid" value="${bd.userid}">
+        <input type="hidden" id="userid" value="${pd.userid}">
 
         <div class="row" style="margin-top: 100px">
             <h3><i class="bi bi-chat-square-dots-fill" style="position: relative; top:-3px "></i>나도 한마디</h3>
@@ -140,13 +167,13 @@
                         <textarea id="reply" name="reply" rows="5"
                                   class="form-control col-7 border-danger"></textarea>&nbsp;&nbsp;
                         <span>
-                            <button type="button" id="bdcmtbtn"
+                            <button type="button" id="pdcmtbtn"
                                     class="btn btn-dark" style="margin-top: 50px">
                                 <i class="bi bi-chat-text-fill" style="position: relative; top:-3px"></i>
                                 댓글쓰기
                             </button>
                         </span>
-                        <input type="hidden" name="bno" value="${param.bno}">
+                        <input type="hidden" name="pno" value="${param.pno}">
                         <input type="hidden" name="userid" id="uid" value="${UID}">
                     </div>
                 </form>
@@ -168,7 +195,7 @@
                     <textarea name="reply" id="rereply" rows="8" cols="75"
                               class="span4"></textarea>
                     <input type="hidden" name="userid" value="${UID}">
-                    <input type="hidden" name="bno" value="${param.bno}">
+                    <input type="hidden" name="pno" value="${param.pno}">
                     <input type="hidden" name="cno" id="cno">
                 </form>
             </div>
