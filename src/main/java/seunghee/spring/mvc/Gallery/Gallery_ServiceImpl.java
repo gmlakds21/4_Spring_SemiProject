@@ -29,10 +29,10 @@ public class Gallery_ServiceImpl implements Gallery_Service{
             // 첨부파일이 존재한다면 서버에 저장하고
             // 그 결과로 파일이름을 받아서 동적배열에 저장
             for (MultipartFile f : img) {
-                if (!f.getOriginalFilename().isEmpty())
+                if (!f.getOriginalFilename().isEmpty()) {
                     imgs.add(imgutil.ImageUpload(f));
                     // 업로드 결과값은 "파일명/사이즈"로 넘어옴
-                else
+                } else
                     imgs.add("_/_");
             }
 
