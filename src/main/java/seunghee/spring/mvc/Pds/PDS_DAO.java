@@ -1,6 +1,7 @@
 package seunghee.spring.mvc.Pds;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PDS_DAO {
 
@@ -14,5 +15,7 @@ public interface PDS_DAO {
 
     PDS_VO selectOnePds(String pno);
 
-    PDS_VO selectOneFname(String pno, String order);
+    PDS_VO selectOneFname(Map param);
+
+    int updateDownCount(Map param);
 }

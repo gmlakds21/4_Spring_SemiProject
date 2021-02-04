@@ -41,5 +41,9 @@
         select ${order} fname1, uuid from Pds where pno = #{pno};
     </select>
 
+    <update id="downCount" statementType="PREPARED"
+            parameterType="Map">
+        update Pds set ${order} = ${order} + 1 where pno = #{pno};
+    </update>
 
 </mapper>

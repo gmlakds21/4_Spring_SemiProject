@@ -18,4 +18,6 @@ public interface PDS_Service {
     boolean viewCountPds(String pno);
 
     PDS_VO readOneFname(String pno, String order);
+
+    boolean downCountPds(String pno, String order);
 }

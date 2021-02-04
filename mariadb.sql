@@ -140,3 +140,29 @@ create table Pds (
 select fname1 fname1, uuid from Pds where pno=2;
 select fname2 fname1, uuid from Pds where pno=2;
 select fname3 fname1, uuid from Pds where pno=2;
+
+update Pds set ftype1 = lower(ftype1), ftype2 = lower(ftype2), ftype3 = lower(ftype3);
+
+
+-- gallery
+
+create table Gallery (
+                     gno int primary key auto_increment,
+                     title varchar(100) not null,
+                     userid varchar(20) not null,
+                     regdate timestamp default current_timestamp,
+                     views int default 0,
+                     thumbs int default 0,
+                     contents text not null,
+                     fnames varchar(1000),
+                     fsizes varchar(1000),
+                     uuid varchar(20)
+);
+
+insert into Gallery (title, userid, contents, fnames, fsizes, uuid)
+    value (?,?,?,?,?,?);
+
+select gno, title, userid, regdate, views, thumbs from Gallery
+    order by gno desc;
+
+select * from Gallery where gno = ?;

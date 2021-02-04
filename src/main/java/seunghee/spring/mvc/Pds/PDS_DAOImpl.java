@@ -39,13 +39,13 @@ public class PDS_DAOImpl implements PDS_DAO {
     }
 
     @Override
-    public PDS_VO selectOneFname(String pno, String order) {
-
-        Map<String, String> param = new HashMap<>();
-        param.put("pno", pno);
-        param.put("order", "fname" + order);
-
+    public PDS_VO selectOneFname(Map param) {
         return sqlSession.selectOne("pds.selectOneFname", param);
+    }
+
+    @Override
+    public int updateDownCount(Map param) {
+        return sqlSession.update("pds.downCount", param);
     }
 
 

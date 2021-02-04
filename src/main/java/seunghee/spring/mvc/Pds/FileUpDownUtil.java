@@ -23,7 +23,7 @@ public class FileUpDownUtil {
     //  => commons.apache.org
     // 3. Servlet 3.x부터 파일업로드 내장 - MultipartFile
 
-    private String uploadPath = "c:/Java/pdsupload/";
+    private String uploadPath = "C:/JAVA/nginx-1.19.6/html/cdn/pdsupload/";
     // 파일 업로드시 저장된 경로 지정
 
     // 업로드 처리 메서드
@@ -95,9 +95,13 @@ public class FileUpDownUtil {
 
                             // 파일 기타정보 처리
                             long fsize = item.getSize() / 1024;
-                            String ftype = fnames[1];
+                            String ftype = fnames[1].toLowerCase();
 
                             frmdata.put(name+"size", fsize+"");
+
+                            if (!ftype.equals("jpg") && !ftype.equals("png") && !ftype.equals("txt") && !ftype.equals("zip"))
+                                ftype = "file";
+
                             frmdata.put(name+"type", ftype);
 
                             // 파일명 처리 결과 확인

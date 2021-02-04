@@ -3,6 +3,7 @@ package seunghee.spring.mvc.Pds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -82,7 +83,26 @@ public class PDS_ServiceImpl implements PDS_Service {
     @Override
     public PDS_VO readOneFname(String pno, String order) {
 
-        return pdao.selectOneFname(pno, order);
+        Map<String, String> param = new HashMap<>();
+        param.put("pno", pno);
+        param.put("order", "fname" + order);
+
+        return pdao.selectOneFname(param);
+    }
+
+    @Override
+    public boolean downCountPds(String pno, String order) {
+
+        boolean isOk = false;
+
+        Map<String, String> param = new HashMap<>();
+        param.put("pno", pno);
+        param.put("order", "fdown" + order);
+
+        int cnt = pdao.updateDownCount(param);
+        if (cnt > 0) isOk = true;
+
+        return isOk;
     }
 
 
