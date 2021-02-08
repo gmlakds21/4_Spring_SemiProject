@@ -1,7 +1,10 @@
 // list
 $('#newgal').on('click', function() {
-    location.href = "/gallery/write";
-})
+    location.href = "/gallery/write"; })
+
+function showing(gno) {
+    location.href = "/gallery/view?gno=" + gno;
+}
 
 // write
 $('#newgalbtn').on('click', function( ) {
@@ -13,3 +16,5 @@ $('#newgalbtn').on('click', function( ) {
         $('#newgalfrm').attr('enctype', 'multipart/form-data');
         $('#newgalfrm').attr('action', '/gallery/writeok');
         $('#newgalfrm').submit(); }});
+
+// view

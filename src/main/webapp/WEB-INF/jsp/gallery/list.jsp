@@ -13,10 +13,10 @@
     integerOnly => 정수값만을 계산한다
 -->
 <fmt:parseNumber var="cp" value="${param.cp}"/>
-<fmt:parseNumber var="pp" value="10"/>
+<fmt:parseNumber var="pp" value="24"/>
 
-<fmt:parseNumber var="tp" value="${pdcnt/pp}" integerOnly="true"/>
-<c:if test="${(pdcnt%pp) gt 0}">
+<fmt:parseNumber var="tp" value="${galcnt/pp}" integerOnly="true"/>
+<c:if test="${(galcnt%pp) gt 0}">
     <fmt:parseNumber var="tp" value="${tp + 1}"/>
 </c:if>
 
@@ -29,10 +29,10 @@
     일반 목록 출력 : /board/view?cp=
     검색후 목록 출력 : /board/find?findtype=???&findkey=???&cp=??
 --%>
-    <c:set var="navlink" value="/pds/list?cp=" />
+    <c:set var="navlink" value="/gallery/list?cp=" />
     <c:if test="${not empty param.findKey}">
         <c:set var="navlink"
-               value="/pds/find?findType=${param.findType}&findKey=${param.findKey}&cp=">
+               value="/gallery/find?findType=${param.findType}&findKey=${param.findKey}&cp=">
         </c:set>
     </c:if>
 
@@ -46,8 +46,28 @@
     page n : {total - (n-1)*10} ~ {total -n*10 +1}
 --%>
 
+<%-- 게시판, 자료실과는 달리 갤러리의 페이지당 게시물 수는 10이 아닌 4의 배수로 지정 --%>
+
 <fmt:parseNumber var="snum" integerOnly="true"
-                 value="${pdcnt - (cp-1) * pp}"/>
+                 value="${galcnt - (cp-1) * pp}"/>
+
+<%-- 이미지 출력을 위한 기본 주소 설정 --%>
+<%--<c:set var="baseImgURL" value="http://localhost/cdn/galupload"/>--%>
+<%--<c:set var="thumbURL" value="${baseImgURL}/_thumb/small_"/>--%>
+
+<%-- 이미지 출력을 위한 기본 주소 설정 AWS 용 --%>
+<c:set var="baseImgURL" value="http://15.165.161.209:7732/cdn"/>
+<c:set var="thumbURL" value="${baseImgURL}/_thumb/small_"/>
+
+
+<%--
+    bootstrap 의 card image 사용시
+    card 박스의 크기는 240px (15rem)
+    따라서, 썸네일 이미지의 크기는 220 x 220 px 로 설정
+    1920 x 1080 해상도에서는 card 박스는 한 행에 기본적으로 4개씩 배치할 수 있음
+    단, 작성자와 작성일 사이 간격이 좁아 작성일이 아이디 아래에 출력되는 경우가 있음
+    => 해결책은 아이디 출력시 길이가 길면 말 줄임으로 단축 출력하면 됨
+--%>
 
 
 <div class="main margin30">
@@ -66,7 +86,7 @@
                     <option value="userid">작성자</option>
                 </select>&nbsp;
                 <input type="text" name="findKey" id="findKey" class="form-control col-5">&nbsp;
-                <button type="button" id="pdfindbtn" class="btn btn-dark">
+                <button type="button" id="galfindbtn" class="btn btn-dark">
                     <i class="bi bi-search"></i>검색</button>
             </div>
         </div>
@@ -81,41 +101,35 @@
 
     <div class="row margin1050">
         <div class="col-12">
-            <table class="table table-striped tblines text-center tt">
-                <thead style="background: #dff0d8">
-                <tr>
-                    <th style="width:7%">번호</th>
-                    <th>제목</th>
-                    <th style="width:12%">작성자</th>
-                    <th style="width:10%">작성일</th>
-                    <th style="width:7%">추천</th>
-                    <th style="width:7%">조회</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <th class="text-danger">공지</th>
-                    <th><span class="badge badge-danger">Hot</span> 긴급 알림</th>
-                    <th>운영자</th>
-                    <th>2021.01.15</th>
-                    <th>10</th>
-                    <th>128</th>
-                </tr>
-
-                <c:forEach var="p" items="${pds}">
-                <tr>
-                    <td>${snum}</td>
-                    <td><a href="/pds/view?cp=${cp}&pno=${p.pno}">${p.title}</a></td>
-                    <td>${p.userid}</td>
-                    <td>${fn: substring(p.regdate,0,10)}</td>
-                    <td>${p.thumbs}</td>
-                    <td>${p.views}</td>
-                </tr>
-                <c:set var="snum" value="${snum-1}"/>
+            <ul class="list-inline">
+                <c:forEach var="g" items="${gals}">
+                    <li class="list-inline-item" style="margin-bottom: 10px">
+                        <div class="card" style="width: 235px;">
+                            <img src="${thumbURL}${g.gno}_${fn:split(g.fnames,"[/]")[0]}" class="card-img-top" alt=""
+                                width="220" height="220"
+                                 onclick="javascript:showing('${g.gno}')"
+                                 style=" cursor: pointer"
+                            >
+                            <div class="card-body">
+                                <h5 class="card-title">${g.title}</h5>
+                                <p class="card-text">
+                                    <span style="float: left"> ${g.userid}</span>
+                                    <span style="float: right"> ${fn:substring(g.regdate,2,10)}</span>
+                                </p>
+                                <p class="card-text" style="clear: both">
+                                    <span style="float: left">
+                                        <i class="bi bi-eye"></i>&nbsp;${g.views}
+                                    </span>
+                                    <span style="float: right">
+                                        <i class="bi bi-hand-thumbs-up"></i>&nbsp;${g.thumbs}
+                                    </span>
+                                </p>
+                                <a href="#" style="clear: both" class="btn btn-primary">Go somewhere</a>
+                            </div>
+                        </div>
+                    </li>
                 </c:forEach>
-
-                </tbody>
-            </table>
+            </ul>
         </div>
     </div>
 

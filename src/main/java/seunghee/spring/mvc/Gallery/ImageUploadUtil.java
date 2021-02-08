@@ -1,5 +1,6 @@
 package seunghee.spring.mvc.Gallery;
 
+import org.apache.commons.io.FileUtils;
 import org.imgscalr.Scalr;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
@@ -7,14 +8,21 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Set;
 
 @Component("imgutil")
 public class ImageUploadUtil {
 
     // 이미지 업로드 경로 설정
-    private String IMG_UPLOAD_PATH = "C:/JAVA/nginx-1.19.6/html/cdn/galupload/";
+    // private String IMG_UPLOAD_PATH = "C:/JAVA/nginx-1.19.6/html/cdn/galupload/";
+    private String IMG_UPLOAD_PATH = "/home/centos/imgupload/";
 
     // 갤러리에 이미지 첨부시 파일 존재 여부 확인
     public boolean checkGalleryFiles(MultipartFile[] img) {
@@ -39,7 +47,7 @@ public class ImageUploadUtil {
         String imgtype = fname.substring(fname.lastIndexOf(".")+1);
         // 썸내일 이미지 이름 설정
         String tfname = IMG_UPLOAD_PATH + "_thumb/small_"
-                + id + "." + imgtype;
+                + id + "_" + fname;
 
         try {
             // 원본이미지를 읽어서 메모리상에 이미지 객체(갠버스)로 만들어 둠
@@ -56,10 +64,20 @@ public class ImageUploadUtil {
 
             // 잘라낸 이미지를 230x200으로 재조정
             BufferedImage resizedImg = Scalr.resize(
-                    scaledImg, 235, 200, null);
+                    scaledImg, 220, 220, null);
 
             // 재조정한 이미지를 실제경로에 저장함
             ImageIO.write(resizedImg, imgtype, new File(tfname));
+
+            // linux
+            // 업로드한 파일의 퍼미션을 설정 (읽고 쓰고 수정)
+            // 즉, 업로드한 파일의 권한을 755로 설정
+            // read : 4, write : 2, execute : 1
+            String perms = "rwxr-xr-x";
+            Path img = Paths.get(tfname);
+            Set<PosixFilePermission> pfp = PosixFilePermissions.fromString(perms);
+            Files.setPosixFilePermissions(img, pfp);
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -86,8 +104,19 @@ public class ImageUploadUtil {
         try {
             // 업로드한 이미지는 웹 서버의 임시 폴더에 저장됨
             // 이것을 원하는 위치에 다시 옮기기위해 transferTo 메서드를 사용
-            mf.transferTo(
-                    new File(IMG_UPLOAD_PATH + nfname));
+
+             mf.transferTo(new File(IMG_UPLOAD_PATH + nfname));
+
+            // linux
+            // 업로드한 파일의 퍼미션을 설정 (읽고 쓰고 수정)
+            // 즉, 업로드한 파일의 권한을 755로 설정
+            // read : 4, write : 2, execute : 1
+            String perms = "rwxr-xr-x";
+            Path img = Paths.get(IMG_UPLOAD_PATH + nfname);
+            Set<PosixFilePermission> pfp = PosixFilePermissions.fromString(perms);
+            Files.setPosixFilePermissions(img, pfp);
+
+
         } catch (Exception ex) {
             ex.printStackTrace();
         }

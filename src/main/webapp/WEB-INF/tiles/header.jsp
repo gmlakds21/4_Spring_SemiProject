@@ -35,7 +35,7 @@
         </c:if>
         <li class="nav-item"><a class="nav-link" href="/board/list?cp=1">게시판</a></li>
         <li class="nav-item"><a class="nav-link" href="/pds/list?cp=1">자료실</a></li>
-        <li class="nav-item"><a class="nav-link" href="/gallery/list?=1">갤러리</a></li>
+        <li class="nav-item"><a class="nav-link" href="/gallery/list?cp=1">갤러리</a></li>
         <li class="nav-item"><a class="nav-link" href="/admin">관리자</a></li>
     </ul>
 </nav>

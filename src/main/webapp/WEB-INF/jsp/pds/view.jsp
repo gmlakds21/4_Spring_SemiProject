@@ -56,7 +56,7 @@
                 <tr class="tblines2" style="background: #ffffcc">
                     <td colspan="2">${fn:replace(pd.contents, newChar, "<br>")}</td>
                 </tr>
-                <c:if test="${pd.fname1 ne null}">
+                <c:if test="${pd.fname1 ne '_'}">
                     <tr>
                         <td class="text-left">첨부1</td>
                         <td>
@@ -66,7 +66,7 @@
                         </td>
                     </tr>
                 </c:if>
-                <c:if test="${pd.fname2 ne null}">
+                <c:if test="${pd.fname2 ne '_'}">
                     <tr>
                         <td class="text-left">첨부2</td>
                         <td>
@@ -76,7 +76,7 @@
                         </td>
                     </tr>
                 </c:if>
-                <c:if test="${pd.fname3 ne null}">
+                <c:if test="${pd.fname3 ne '_'}">
                     <tr>
                         <td class="text-left">첨부3</td>
                         <td>

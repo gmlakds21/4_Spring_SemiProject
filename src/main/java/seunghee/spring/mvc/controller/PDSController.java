@@ -5,6 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import seunghee.spring.mvc.Pds.FileUpDownUtil;
 import seunghee.spring.mvc.Pds.PDS_Service;
@@ -34,20 +35,31 @@ public class PDSController {
     }
 
     // commons File Upload 로 구현한 자료실
+    // @PostMapping("/pds/writeok") // 파일 업로드
+    // public String writeok(PDS_VO pvo, HttpServletRequest req) {
+
+        // 파일 업로드 리졸버를 이용하지 않은 기존 방식
+            // Map<String, String> frmdata = fud.procUpload(req);
+            /* 파일 업로드 리졸버를 사용하지 않고 commons FileUpload 를 사용하는 경우
+             * pvo 에 폼 데이터가 자동으로 주입되지 않음
+             * System.out.println(pvo.getTitle());
+             * System.out.println(pvo.getContents());
+             */
+            // psrv.newPds(frmdata, pvo);
+    //    return "redirect:/pds/list?cp=1";
+    //}
+
+
+    // MultipartFile 로 구현한 자료실
     @PostMapping("/pds/writeok") // 파일 업로드
-    public String writeok(PDS_VO pvo, HttpServletRequest req) {
+    public String writeok(PDS_VO pvo, MultipartFile[] file) {
 
-        Map<String, String> frmdata = fud.procUpload(req);
-        /* 파일 업로드 리졸버를 사용하지 않고 commons FileUpload 를 사용하는 경우
-         * pvo 에 폼 데이터가 자동으로 주입되지 않음
-         * System.out.println(pvo.getTitle());
-         * System.out.println(pvo.getContents());
-         */
-
-        psrv.newPds(frmdata, pvo);
-
+             psrv.newPds(file, pvo);
         return "redirect:/pds/list?cp=1";
     }
+
+
+
 
 
     @GetMapping("/pds/list")

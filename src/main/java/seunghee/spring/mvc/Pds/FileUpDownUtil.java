@@ -7,10 +7,16 @@ import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.commons.fileupload.servlet.ServletRequestContext;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -23,7 +29,8 @@ public class FileUpDownUtil {
     //  => commons.apache.org
     // 3. Servlet 3.x부터 파일업로드 내장 - MultipartFile
 
-    private String uploadPath = "C:/JAVA/nginx-1.19.6/html/cdn/pdsupload/";
+//    private String uploadPath = "C:/JAVA/nginx-1.19.6/html/cdn/pdsupload/";
+    private String uploadPath = "/home/centos/pdsupload/";
     // 파일 업로드시 저장된 경로 지정
 
     // 업로드 처리 메서드
@@ -202,8 +209,10 @@ public class FileUpDownUtil {
     // fName, fname 구분해서 보자
     public void procDownloadV2( String fname, String uuid, HttpServletResponse res) throws IOException {
 
+        int cut = fname.lastIndexOf(".");
         // 다운로드할 파일이름 조합
-        String fName = fname.split("[.]")[0] + uuid + "." + fname.split("[.]")[1];
+        String fName = fname.substring(0, cut) + uuid + "." + fname.substring(cut +1);
+
 
         // HTTP 응답을 위해 stream 관련 변수 선언
         InputStream is = null;
@@ -271,4 +280,39 @@ public class FileUpDownUtil {
     } // method
 
 
+    // MultipartFile 로 구현한 업로드 처리 소스
+    public String procUpload2(MultipartFile mf, String uuid) {
+
+        // 파일의 원래 이름을 가져옴
+        String ofname = mf.getOriginalFilename();
+
+        int cut = ofname.lastIndexOf(".");
+        String ftype = ofname.substring(cut +1);
+        String fname = ofname.substring(0, cut);
+        String nfname = fname + uuid + "." +ftype;
+
+        try {
+            mf.transferTo(new File(uploadPath + nfname));
+
+            // 업로드한 파일 퍼미션 지정
+            String perms = "rwxr-xr-x";
+            Path img = Paths.get(uploadPath + nfname);
+            Set<PosixFilePermission> pfp = PosixFilePermissions.fromString(perms);
+            Files.setPosixFilePermissions(img, pfp);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
+        return ofname +"/"+ (mf.getSize()/1024) +"/"+ ftype;
+    }
+
+
+    public String makeUUID() {
+
+        String fmt = "yyyyMMddHHmmss";
+        SimpleDateFormat sdf = new SimpleDateFormat(fmt);
+
+        return sdf.format(new Date());
+    }
 }

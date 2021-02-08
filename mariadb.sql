@@ -166,3 +166,12 @@ select gno, title, userid, regdate, views, thumbs from Gallery
     order by gno desc;
 
 select * from Gallery where gno = ?;
+
+
+
+select max(gno) from Gallery;
+
+select gno from Gallery order by gno desc limit 1;
+
+select auto_increment-1 as gno from information_schema.TABLES
+    where TABLE_NAME = 'Gallery';

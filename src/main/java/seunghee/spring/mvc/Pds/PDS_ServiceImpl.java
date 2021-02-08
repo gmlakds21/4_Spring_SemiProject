@@ -2,7 +2,9 @@ package seunghee.spring.mvc.Pds;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import java.util.Map;
 public class PDS_ServiceImpl implements PDS_Service {
 
     @Autowired private PDS_DAO pdao;
+    @Autowired private FileUpDownUtil fud;
 
     @Override
     public boolean newPds(Map<String, String> frmdata, PDS_VO pvo) {
@@ -18,6 +21,49 @@ public class PDS_ServiceImpl implements PDS_Service {
         procFormdata(pvo, frmdata);
 
         boolean isOk = false;
+        int cnt = pdao.insertPds(pvo);
+        if (cnt > 0) isOk =true;
+
+        return isOk;
+    }
+
+    // MultipartFile로 구현된 자료실 소스
+    @Override
+    public boolean newPds(MultipartFile[] file, PDS_VO pvo) {
+
+        boolean isOk = false;
+        List<String> files = new ArrayList<>();
+        // 파일 업로드시 사용할 UUID 생성
+        String uuid = fud.makeUUID();
+
+        for (MultipartFile f : file ) {
+            if (!f.getOriginalFilename().isEmpty())
+                files.add(fud.procUpload2(f, uuid));
+                // 파일 업로드시 앞서 만든 uuid 값을 매개변수로 넘김
+                // 업로드한 뒤 결과값은 "파일명/파일크기/파일종류"로 넘어옴
+            else
+                files.add("_/_/_");
+                // 업로드를 하지 못한 경우 "_/_/_" 만 넘김
+        }
+
+        System.out.println(files.get(0));
+
+        // 업로드한 파일 정보를 vo로 나눠 저장
+        pvo.setFname1(files.get(0).split("[/]")[0]);
+        pvo.setFsize1(files.get(0).split("[/]")[1]);
+        pvo.setFtype1(files.get(0).split("[/]")[2]);
+
+        pvo.setFname2(files.get(1).split("[/]")[0]);
+        pvo.setFsize2(files.get(1).split("[/]")[1]);
+        pvo.setFtype2(files.get(1).split("[/]")[2]);
+
+        pvo.setFname3(files.get(2).split("[/]")[0]);
+        pvo.setFsize3(files.get(2).split("[/]")[1]);
+        pvo.setFtype3(files.get(2).split("[/]")[2]);
+
+        // 위에서 생성한 uuid 를 pvo 에 저장
+        pvo.setUuid(uuid);
+
         int cnt = pdao.insertPds(pvo);
         if (cnt > 0) isOk =true;
 

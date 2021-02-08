@@ -13,8 +13,8 @@
     <select id="selectList" statementType="PREPARED"
             parameterType="int"
             resultType="seunghee.spring.mvc.Gallery.Gallery_VO">
-        select gno, title, userid, regdate, thumbs, views from Gallery
-            order by gno desc limit #{stratnum}, 10
+        select gno, title, userid, regdate, thumbs, views, fnames from Gallery
+            order by gno desc limit #{startnum}, 24
     </select>
 
     <select id="countGallery" statementType="PREPARED"
@@ -33,4 +33,10 @@
         update Gallery set views = views + 1 where gno = #{gno};
     </update>
 
+
+    <select id="lastGalleryID" statementType="PREPARED"
+            resultType="int">
+        select auto_increment-1 as gno from information_schema.TABLES
+            where TABLE_NAME = 'Gallery';
+    </select>
 </mapper>
