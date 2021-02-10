@@ -23,7 +23,7 @@
               p:driverClassName="org.mariadb.jdbc.Driver"
               p:url="jdbc:mariadb://maria-db.coqecfviusin.ap-northeast-2.rds.amazonaws.com:3306/spring4"
               p:username="spring4"
-              p:password="spring42020" />
+              p:password="tmdgml201" />
 
     <!-- myBatis : Session -->
     <!-- myBatis3 설정 #1 -->
